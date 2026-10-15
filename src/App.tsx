@@ -5,12 +5,15 @@ import { useLayoutEffect, useRef } from "react";
 import { LeafMark } from "./components/LeafMark";
 import { countUp, heroIntro, prefersReducedMotion } from "./motion";
 import { SectionTitle } from "./components/SectionTitle";
-import { contacts, education, profile, projects, quests, skills } from "./data/profile";
+import { useContent } from "./content";
 import photo from "./assets/profile-photo.jpg";
 
 const KANJI = ["壱", "弐", "参", "肆", "伍", "陸", "漆", "捌", "玖", "拾"];
 
 function Hero() {
+  const { profile } = useContent().content;
+  const words = profile.name.trim().split(/\s+/);
+  const last = words.length > 1 ? words.pop() : "";
   const ref = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -28,11 +31,11 @@ function Hero() {
             <span className="hero-place">{profile.location}</span>
           </p>
           <h1 id="hero-name">
-            <span className="hero-first">Muhammad Rifqi</span>
-            <span className="hero-last">Fachruradzi</span>
+            <span className="hero-first">{words.join(" ")}</span>
+            {last ? <span className="hero-last">{last}</span> : null}
           </h1>
           <p className="hero-role">{profile.role}</p>
-          <p className="hero-summary">{profile.dialog[1]} {profile.dialog[2]}</p>
+          <p className="hero-summary">{profile.headline}</p>
         </div>
       </div>
     </section>
@@ -40,6 +43,7 @@ function Hero() {
 }
 
 function Bonfire() {
+  const { profile, education } = useContent().content;
   return (
     <section className="section" id="bonfire" aria-labelledby="bonfire-title">
       <SectionTitle id="bonfire-title" numeral="壱" eyebrow="Rest by the falls" title="About Me" />
@@ -76,17 +80,18 @@ function Bonfire() {
 }
 
 function Journey() {
+  const { quests, sections } = useContent().content;
   return (
     <section className="section" id="journey" aria-labelledby="journey-title">
       <SectionTitle id="journey-title"
         numeral="弐"
         eyebrow="Missions completed"
         title="The Journey"
-        lead="Three roles across Indonesia's logistics tech, from Python services to Go microservices and micro-frontends."
+        lead={sections.journeyLead}
       />
       <ol className="journey">
         {quests.map((quest, index) => (
-          <Reveal as="li" key={quest.id} className="quest" delay={index * 60}>
+          <Reveal as="li" key={`${quest.id}-${index}`} className="quest" delay={index * 60}>
             <div className="quest-marker" aria-hidden="true"><span>{KANJI[index]}</span></div>
             <article>
               <header>
@@ -123,13 +128,14 @@ function Journey() {
 }
 
 function Relics() {
+  const { projects, sections } = useContent().content;
   return (
     <section className="section" id="relics" aria-labelledby="relics-title">
       <SectionTitle id="relics-title"
         numeral="参"
         eyebrow="Scrolls written"
         title="Projects"
-        lead="Enterprise-grade apps, AI experiments, and a thesis, each built end to end."
+        lead={sections.projectsLead}
       />
       <div className="relics">
         {projects.map((project, index) => (
@@ -163,6 +169,7 @@ function Relics() {
 }
 
 function Attributes() {
+  const { skills, sections } = useContent().content;
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -173,7 +180,7 @@ function Attributes() {
 
   return (
     <section className="section" id="attributes" aria-labelledby="attributes-title">
-      <SectionTitle id="attributes-title" numeral="肆" eyebrow="Techniques mastered" title="Jutsu & Skills" lead="The tools I reach for, from the backend to the browser." />
+      <SectionTitle id="attributes-title" numeral="肆" eyebrow="Techniques mastered" title="Jutsu & Skills" lead={sections.skillsLead} />
       <div ref={ref} className="attributes">
         {skills.map((group, index) => (
           <Reveal key={group.title} className="attribute" delay={index * 60}>
@@ -192,13 +199,14 @@ function Attributes() {
 }
 
 function Summon() {
+  const { contacts, sections } = useContent().content;
   return (
     <section className="section summon" id="summon" aria-labelledby="summon-title">
       <SectionTitle id="summon-title"
         numeral="伍"
         eyebrow="Summoning jutsu"
         title="Summon Me"
-        lead="Open to full stack and backend roles, collaborations, and interesting problems. Messages answered before the next mission."
+        lead={sections.summonLead}
       />
       <Reveal className="summon-links">
         {contacts.map((contact) => (
@@ -218,11 +226,12 @@ function Summon() {
 }
 
 export default function App() {
+  const { content, revision } = useContent();
   return (
     <>
       <ValleyBackground />
       <Nav />
-      <main>
+      <main key={revision}>
         <Hero />
         <Bonfire />
         <Journey />
@@ -231,7 +240,7 @@ export default function App() {
         <Summon />
       </main>
       <footer className="footer">
-        <p>© {new Date().getFullYear()} {profile.name}</p>
+        <p>© {new Date().getFullYear()} {content.profile.name}</p>
         <p className="footer-note">Background: the Valley of the End, pixelated and set in motion.</p>
       </footer>
     </>

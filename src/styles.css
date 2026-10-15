@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Shinobi Display";
+  src: url("./assets/fonts/shinobi-display.woff2") format("woff2");
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
   --bg: #060b0a;
@@ -14,6 +20,7 @@
   --ember-glow: rgba(245, 139, 60, 0.35);
   --gold: #9fc46a;
   --serif: "EB Garamond Variable", "EB Garamond", Georgia, serif;
+  --brand: "Shinobi Display", var(--display);
   --display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
   --gutter: clamp(16px, 5vw, 64px);
   --max: 1200px;
@@ -137,8 +144,8 @@ h3 {
   align-items: center;
   gap: 12px;
   color: var(--ink);
-  font: 600 14px/1 var(--display);
-  letter-spacing: 0.32em;
+  font: 400 17px/1 var(--brand);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
 }
@@ -290,6 +297,8 @@ h3 {
 }
 
 .hero-first {
+  font-family: var(--brand);
+  font-weight: 400;
   color: var(--hint);
   font-size: clamp(22px, 2.6vw, 34px);
   letter-spacing: 0.18em;
@@ -297,6 +306,8 @@ h3 {
 }
 
 .hero-last {
+  font-family: var(--brand);
+  font-weight: 400;
   font-size: clamp(40px, 4.7vw, 72px);
   white-space: nowrap;
   background: linear-gradient(180deg, #ffe7c9 8%, #f8a45c 55%, #c2591f 100%);

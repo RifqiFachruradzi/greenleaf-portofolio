@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FrogMark } from "./FrogMark";
+import { AdminButton } from "../admin/AdminPanel";
 
 const LINKS = [
   { href: "#bonfire", label: "About" },
@@ -24,8 +25,9 @@ export function Nav() {
     <header className={`nav${scrolled ? " is-scrolled" : ""}${open ? " is-open" : ""}`}>
       <a className="nav-brand" href="#top" onClick={() => setOpen(false)}>
         <FrogMark className="nav-frog" size={24} />
-        Portofolio
+        <span className="nav-wordmark">Portofolio</span>
       </a>
+      <AdminButton onOpen={() => setOpen(false)} />
       <button
         type="button"
         className="nav-toggle"
